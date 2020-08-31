@@ -1,18 +1,65 @@
 let moves = ["rock","paper","scissors","lizard","spock"]
-var computerWins;
-var playerWins;
+let computerWins = 0;
+let playerWins = 0;
+let roundCounter = 0;
+
+function setGame() {
+  boxes = document.querySelectorAll('.box').forEach(function setZero(node) {
+    var box = node;
+    var content = document.createElement('num');
+    content.textContent = 0; // use variable name here without using eval in the future.
+    box.appendChild(content);
+    })};
+
+function addRound() {
+  roundCounter ++
+  var roundBox = document.getElementById('roundCounter')
+  var newRound = document.createElement('num')
+  newRound.textContent = roundCounter;
+  roundBox.lastChild.replaceWith(newRound);
+  roundBox.classList.toggle('playing')
+}
+
+function scoreWin(winner) {
+  if (winner == "com") {
+    if (computerWins >= 5) {fiveGameMatch();}
+    else {
+    var computerBox = document.getElementById('computerWins')
+    var newScore = document.createElement('num')
+    newScore.textContent = computerWins;
+    computerBox.lastChild.replaceWith(newScore);
+    computerBox.classList.toggle('playing')
+    }
+  }
+  else{ 
+    if (playerWins >= 5) {fiveGameMatch();}
+    else {
+    var playerBox = document.getElementById('playerWins')
+    var newScore = document.createElement('num')
+    newScore.textContent = playerWins;
+    playerBox.lastChild.replaceWith(newScore);
+    playerBox.classList.toggle('playing')
+    }
+  }
+  addRound()
+}
 
 function computerWin() {
  computerWins ++
- if (computerWins > 1) {return "My win tally is " + computerWins + " games.\n\n\n"}
- else {return "I have won one game.\n\n\n"}
+ scoreWin('com')
  }
 
  function playerWin() {
   playerWins ++
-  if (playerWins > 1) {return "Your win tally is " + playerWins + " games.\n\n\n"}
-  else { return "You have won one game.\n\n\n"}
+  scoreWin('player')
   }
+
+
+function computerPlay() {
+  let itemCount = moves.length - 1;
+  num = randomNum(0,itemCount)
+  return moves[num];
+}
 
 function randomNum(start,end) {
   let num = end + 10;
@@ -25,114 +72,156 @@ function randomNum(start,end) {
   }
 }
 
-function computerPlay() {
-  let itemCount = moves.length - 1;
-  num = randomNum(0,itemCount)
-  return moves[num];
-}
-
-function humanPlay() {
-  var humanMove;
-  var count;
-  while (moves.indexOf(humanMove) == -1) {
-  if (count > 0) {
-    humanMove = prompt("Try again. What's your move player? (rock, paper, scissors, lizard, Spock)","rock")
-    humanMove = humanMove.toLowerCase()
-  }
-  else {
-  count = 0
-  humanMove = prompt("What is your move, player? (rock, paper, scissors, lizard, Spock)","rock")
-  humanMove = humanMove.toLowerCase()
-  count ++
-  }
-  }
-  return humanMove;
-}
-
-
 function gameRound(hp) {
   let cp = computerPlay();
   if (hp === undefined) {return "I did not understand your play of" + hp}
-  if (cp == hp) { return "It is a draw. We both chose " + hp.replace("spock","Spock")}
+  if (cp == hp) { addRound(); return "It is a draw. We both chose " + hp.replace("spock","Spock")+". "}
   if (cp == "rock") {
       switch (hp) {
         case "paper":
-          return "You have beat me this time! Paper covers rock.\n\n" + playerWin();
+          playerWin();
+          return "Paper covers rock.\n\n"
         case "Spock":
-          return "You have vaporized my rock with Spock!\n\n" + playerWin();
+          playerWin();
+          return "You have vaporized my rock with Spock!\n\n"
         default:
           computerWin();
-          return "I have won this round. " + cp + " beats " + hp + ".\n\n" + computerWin();;
+          console.log ("HP: " + hp + " CPU: " + cp);
+          return capitalize(cp) + " beats " + hp + ".\n\n"
     }
   }
    else if (cp == "paper") {
       switch (hp) {
         case "lizard":
-          return "The lizard ate my paper. You win.\n\n" + playerWin();
+          playerWin();
+          return "The lizard ate my paper. \n" 
         case "spock":
-          return "My paper disproves Spock. I win.\n\n" + computerWin();;
+          computerWin();
+          return "My paper disproves Spock.\n\n"
         case "scissors":
-          return "The scissors have cut my paper. You win.\n\n" + playerWin();
+          playerWin();
+          return "The scissors have cut my paper. \n"
         default:
-          return "I have won this round. " + cp + " beats " + hp + ".\n\n" + computerWin();
+          computerWin();
+          return capitalize(cp) + " beats " + hp + ".\n\n"
     }
   }
     else if (cp == "scissors") {
       switch (hp) {
         case "rock":
-          return "Rock crushes my scissors. You win.\n\n" + playerWin();
+          playerWin();
+          return "Rock crushes my scissors.\n"
         case "spock":
-          return "My scissors are smashed by Spock! You win.\n\n" + playerWin();
+          playerWin();
+          return "My scissors are smashed by Spock!\n\n" 
         default:
-          return "I win this round. " + cp + " beats " + hp + ".\n\n" + computerWin();
+          computerWin();
+          return capitalize(cp) + " beats " + hp + ".\n\n" 
     }
 
   }
   else if (cp == "lizard") {
     switch (hp) {
       case "rock":
-        return "Rock crushes my lizard. \nYou win.\n\n" + playerWin();
+        playerWin();
+        return "Rock crushes my lizard.\n\n" 
       case "scissors":
-        return "Scissors decapitates my lizard! You win.\n\n" + playerWin();
+        playerWin();
+        return "Scissors decapitates my lizard! \n\n" 
       case "spock":
-        return "Lizard poisons Spock. I win.\n\n" + computerWins();
+        computerWin();
+        return "Lizard poisons Spock.\n\n"  
       default:
-        return "I have won this round. " + cp + " beats " + hp + ".\n\n" + computerWin();
+        computerWin();
+        return capitalize(cp) + " beats " + hp + ".\n\n" 
   }
 
 }
 else if (cp == "spock") {
   switch (hp) {
     case "paper":
-      return "Your paper disproves Spock. You win.\n\n" + playerWin();
+      playerWin();
+      return "Your paper disproves Spock.\n\n"
     case "lizard":
-      return "Your lizard poisons Spock! You win.\n\n" + playerWin();
+      playerWin();
+      return "Your lizard poisons Spock!\n\n"
     case "rock":
-      return "Spock vaporizes your rock. I win.\n\n" + computerWin()
+      computerWin();
+      return "Spock vaporizes your rock.\n\n"
     case "scissors":
-      return "Spock Smashes your scissors. I win.\n\n" + computerWin()
+      computerWin();
+      return "Spock Smashes your scissors. \n\n"
     default:
-      return "Red shirt dies. The choice" + hp + " found something broke.\n\n\n";
+      console.log ("HP: " + hp + " CPU: " + cp);
+      return "Red shirt dies. The choice " + hp + " found something broke.\n\n\n";
     }
 }
    else {
-     return "KHAN!!!" + hp + " " + cp + " found something broke.\n\n\n";
+    console.log ("HP: " + hp + " CPU: " + cp);
+    return "KHAN!!!" + hp + " " + cp + " found something broke.\n\n\n";
    }
 }
 
+function returnWin(winner) {
+  var scoreBox = document.querySelector('.score');
+  var winBox = document.querySelector('.win');
+  
+  if (winBox === null) {     
+    const content = document.createElement('div');
+    content.classList.add('win');
+    content.textContent = winner;
+    scoreBox.appendChild(content);
+  }
+  else{
+    
+    winBox.lastChild.replaceWith(winner);
+  }
+}
 
 function fiveGameMatch() {
-computerWins = 0
-playerWins = 0
-while (computerWins < 5 && playerWins < 5) {
-let hp = humanPlay();
-let gr = gameRound(hp);
-window.alert(gr);
+  if (computerWins < playerWins) {
+  
+    window.alert("Fasinating, you have defeated me.\nComputer Score: " + computerWins + "\nHuman Score: " + playerWins + "\n\n");
+  }
+  else {
+    window.alert("One day the game may be yours, today is not that day.\nComputer Score: " + computerWins + "\nHuman Score: " + playerWins + "\n\n");}
+  }
+
+function alertButton(e) {
+  hp = `${this.value}`;
+  node = this.firstElementChild;
+  node.classList.toggle('playing')
+  let gr = gameRound(hp);
+  returnWin(gr);
+ }
+ 
+ 
+ function eventKey(e) {
+   var div = document.querySelector(`.key[data-key="${e.keyCode}"`);
+   var play = div.querySelector('.play')
+   hp = play.innerText.toLowerCase()
+   div.classList.toggle('playing');
+   let gr = gameRound(hp);
+   returnWin(gr);
+ };
+
+function capitalize(play) {
+return play.charAt(0).toUpperCase() + play.slice(1)
 }
 
+function removeTransition(e) {
+  if(e.propertyName !== 'transform') return;
+  this.classList.remove('playing');
 }
-fiveGameMatch();
-if (computerWins < playerWins) {
-  window.alert("Fasinating, you have defeated me.\nComputer Score: " + computerWins + "\nHuman Score: " + playerWins + "\n\n");
-}
-else { window.alert("One day the game may be yours, today is not that day.\nComputer Score: " + computerWins + "\nHuman Score: " + playerWins + "\n\n");}
+
+const buttons= document.querySelectorAll('.button');
+buttons.forEach(button => button.addEventListener('click', alertButton));
+
+document.addEventListener("keydown", eventKey);
+
+const allkeys = document.querySelectorAll('.key');
+allkeys.forEach(key => key.addEventListener('transitionend', removeTransition));
+
+
+const allBox = document.querySelectorAll('.box');
+allBox.forEach(box => box.addEventListener('transitionend', removeTransition));
